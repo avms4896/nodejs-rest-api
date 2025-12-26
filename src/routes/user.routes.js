@@ -1,31 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const protect = require("../middleware/auth.middleware");
 
-// Get all users
-router.get("/", (req, res) => {
+router.get("/", protect, (req, res) => {
   res.json({
-    message: "Get all users (placeholder)"
-  });
-});
-
-// Create user
-router.post("/", (req, res) => {
-  res.json({
-    message: "Create user (placeholder)"
-  });
-});
-
-// Update user
-router.put("/:id", (req, res) => {
-  res.json({
-    message: `Update user ${req.params.id} (placeholder)`
-  });
-});
-
-// Delete user
-router.delete("/:id", (req, res) => {
-  res.json({
-    message: `Delete user ${req.params.id} (placeholder)`
+    message: "Protected route accessed",
+    user: req.user
   });
 });
 
