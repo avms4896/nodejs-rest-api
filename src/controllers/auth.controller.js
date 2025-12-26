@@ -18,13 +18,15 @@ exports.register = async (req, res) => {
     email,
     password: hashedPassword
   });
+res.status(201).json({
+  id: user._id,
+  name: user.name,
+  email: user.email,
+  role: user.role,
+  token: generateToken(user._id)
+});
 
-  res.status(201).json({
-    id: user._id,
-    name: user.name,
-    email: user.email,
-    token: generateToken(user._id)
-  });
+
 };
 
 // Login
@@ -41,10 +43,12 @@ exports.login = async (req, res) => {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  res.json({
-    id: user._id,
-    name: user.name,
-    email: user.email,
-    token: generateToken(user._id)
-  });
+ res.json({
+  id: user._id,
+  name: user.name,
+  email: user.email,
+  role: user.role,
+  token: generateToken(user._id)
+});
+
 };
