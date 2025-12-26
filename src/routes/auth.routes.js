@@ -1,9 +1,21 @@
+const express = require("express");
+const router = express.Router();
+
+const { register, login } = require("../controllers/auth.controller");
+const validate = require("../middleware/validate.middleware");
+
 /**
  * @swagger
  * tags:
  *   name: Auth
  *   description: Authentication APIs
  */
+
+const {
+  registerValidation,
+  loginValidation
+} = require("../validators/auth.validator");
+
 
 /**
  * @swagger
@@ -33,17 +45,6 @@
  *         description: User registered successfully
  */
 
-
-const express = require("express");
-const router = express.Router();
-
-const { register, login } = require("../controllers/auth.controller");
-const validate = require("../middleware/validate.middleware");
-const {
-  registerValidation,
-  loginValidation
-} = require("../validators/auth.validator");
-
 // Register
 router.post(
   "/register",
@@ -51,6 +52,32 @@ router.post(
   validate,
   register
 );
+
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ */
 
 // Login
 router.post(
