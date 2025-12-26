@@ -1,47 +1,35 @@
+dotenv.config();
 const express = require("express");
-const dotenv = require("dotenv");
 const cors = require("cors");
 const helmet = require("helmet");
-const swaggerUi = require("swagger-ui-express");
-const swaggerSpec = require("./config/swagger");
-const apiLimiter = require("./middleware/rateLimit.middleware");
-
-// Load environment variables FIRST
-dotenv.config();
 
 const connectDB = require("./config/db");
+const apiLimiter = require("./middleware/rateLimit.middleware");
+const globalErrorHandler = require("./middleware/error.middleware");
+const AppError = require("./utils/AppError");
+
 connectDB();
 
 const app = express();
 
-// Middleware
+// Security middleware
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// Health check
-app.get("/", (req, res) => {
-  res.json({
-    status: "success",
-    message: "Node.js REST API is running 🚀"
-  });
-});
-
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-app.use(helmet());
+// Rate limiting
 app.use("/api", apiLimiter);
 
 // Routes
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/users", require("./routes/user.routes"));
-const AppError = require("./utils/AppError");
 
+// Handle unknown routes
 app.all("*", (req, res, next) => {
   next(new AppError(`Cannot find ${req.originalUrl}`, 404));
 });
 
 // Global error handler
-const globalErrorHandler = require("./middleware/error.middleware");
 app.use(globalErrorHandler);
 
 
