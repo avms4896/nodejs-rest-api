@@ -1,9 +1,12 @@
- 
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 
+// Load environment variables FIRST
 dotenv.config();
+
+const connectDB = require("./config/db");
+connectDB();
 
 const app = express();
 
@@ -19,7 +22,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// Routes (will expand later)
+// Routes
 app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/users", require("./routes/user.routes"));
 
