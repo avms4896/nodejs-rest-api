@@ -33,13 +33,9 @@ app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/users", require("./routes/user.routes"));
 
 // Global error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    status: "error",
-    message: "Something went wrong"
-  });
-});
+const globalErrorHandler = require("./middleware/error.middleware");
+app.use(globalErrorHandler);
+
 
 const PORT = process.env.PORT || 5000;
 
