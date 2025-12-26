@@ -19,6 +19,8 @@ A scalable REST API built with Node.js and Express, featuring authentication, CR
 - dotenv
 
 ## 📁 Project Structure
+
+```text
 src/
 ├── controllers/
 ├── routes/
@@ -27,6 +29,7 @@ src/
 ├── config/
 ├── utils/
 └── app.js
+
 
 
 ## ⚙️ Setup & Installation
