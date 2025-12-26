@@ -1,29 +1,44 @@
-/**
- * @swagger
- * tags:
- *   name: Users
- *   description: User APIs
- */
-
-/**
- * @swagger
- * /api/users/profile:
- *   get:
- *     summary: Get logged-in user profile
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: User profile retrieved
- */
-
-
 const express = require("express");
 const router = express.Router();
 
 const protect = require("../middleware/auth.middleware");
 const authorize = require("../middleware/role.middleware");
+const { getUsers } = require("../controllers/user.controller");
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get users with pagination and filtering
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of users
+ */
+
+router.get(
+  "/",
+  protect,
+  authorize("admin"),
+  getUsers
+);
+
+
 
 // Admin-only route
 router.get(
