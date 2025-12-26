@@ -1,3 +1,6 @@
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
+
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -21,6 +24,9 @@ app.get("/", (req, res) => {
     message: "Node.js REST API is running 🚀"
   });
 });
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 // Routes
 app.use("/api/auth", require("./routes/auth.routes"));
