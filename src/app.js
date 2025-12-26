@@ -4,6 +4,8 @@ const cors = require("cors");
 const helmet = require("helmet");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
+const apiLimiter = require("./middleware/rateLimit.middleware");
+
 // Load environment variables FIRST
 dotenv.config();
 
@@ -27,6 +29,7 @@ app.get("/", (req, res) => {
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(helmet());
+app.use("/api", apiLimiter);
 
 // Routes
 app.use("/api/auth", require("./routes/auth.routes"));
