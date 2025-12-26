@@ -1,10 +1,17 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
-
+const AppError = require("../utils/AppError");
+const catchAsync = require("../utils/catchAsync");
 // Register
-exports.register = async (req, res) => {
+exports.register = catchAsync(async (req, res, next) => {
   const { name, email, password } = req.body;
+
+  const userExists = await User.findOne({ email });
+  if (userExists) {
+    return next(new AppError("User already exists", 400));
+  }
+ 
 
   const userExists = await User.findOne({ email });
   if (userExists) {
@@ -30,12 +37,12 @@ res.status(201).json({
 };
 
 // Login
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
+exports.login = = catchAsync(async (req, res, next) => {
+  const { name, email, password } = req.body;
 
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.status(401).json({ message: "Invalid credentials" });
+  const userExists = await User.findOne({ email });
+  if (userExists) {
+    return next(new AppError("User already exists", 400));
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
