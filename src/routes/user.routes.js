@@ -1,18 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const protect = require("../middleware/auth.middleware");
-const validate = require("../middleware/validate.middleware");
-const { createUserValidation } = require("../validators/user.validator");
 
-router.post(
-  "/",
+const protect = require("../middleware/auth.middleware");
+const authorize = require("../middleware/role.middleware");
+
+// Admin-only route
+router.get(
+  "/admin",
   protect,
-  createUserValidation,
-  validate,
+  authorize("admin"),
   (req, res) => {
     res.json({
-      message: "User created (validated)",
-      data: req.body
+      message: "Admin access granted",
+      user: req.user
+    });
+  }
+);
+
+// Any authenticated user
+router.get(
+  "/profile",
+  protect,
+  (req, res) => {
+    res.json({
+      message: "User profile",
+      user: req.user
     });
   }
 );
