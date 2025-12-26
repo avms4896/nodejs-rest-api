@@ -28,7 +28,6 @@ A scalable REST API built with Node.js and Express, featuring authentication, CR
 ├── utils/
 └── app.js
 
-
 ## ⚙️ Setup & Installation
 1. Clone the repository
 2. Install dependencies
